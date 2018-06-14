@@ -30,10 +30,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
     const getShaderSource = url => fetch(url).then(r => r.text());
 
     const vertexShader = gl.createShader(gl.VERTEX_SHADER);
-    gl.shaderSource(vertexShader, await getShaderSource("shader.vert"));
+    gl.shaderSource(vertexShader, await getShaderSource("/fiddling-with-webgl/shader.vert"));
     gl.compileShader(vertexShader);
     const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
-    gl.shaderSource(fragmentShader, await getShaderSource("shader.frag"));
+    gl.shaderSource(fragmentShader, await getShaderSource("/fiddling-with-webgl/shader.frag"));
     gl.compileShader(fragmentShader);
 
     const program = gl.createProgram();
