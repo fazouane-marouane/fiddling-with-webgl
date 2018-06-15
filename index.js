@@ -1,6 +1,5 @@
-document.addEventListener("DOMContentLoaded", function(event) { 
-
-(async function() {
+// @ts-check
+window.addEventListener("DOMContentLoaded", async function() {
   "use strict";
 
   const canvas = /** @type {HTMLCanvasElement} */ (document.getElementById(
@@ -30,10 +29,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
     const getShaderSource = url => fetch(url).then(r => r.text());
 
     const vertexShader = gl.createShader(gl.VERTEX_SHADER);
-    gl.shaderSource(vertexShader, await getShaderSource("/fiddling-with-webgl/shader.vert"));
+    gl.shaderSource(vertexShader, await getShaderSource("/shader.vert"));
     gl.compileShader(vertexShader);
     const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
-    gl.shaderSource(fragmentShader, await getShaderSource("/fiddling-with-webgl/shader.frag"));
+    gl.shaderSource(fragmentShader, await getShaderSource("/shader.frag"));
     gl.compileShader(fragmentShader);
 
     const program = gl.createProgram();
@@ -45,53 +44,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
     return program;
   }
 
-  function neighbors(hexagon) {
-    const ne = hexagon.map(t => [t[0] + 2, t[1] + 1]);
-    const n = hexagon.map(t => [t[0] + 1, t[1] + 2]);
-    const nw = hexagon.map(t => [t[0] - 1, t[1] + 1]);
-    const sw = hexagon.map(t => [t[0] - 2, t[1] - 1]);
-    const s = hexagon.map(t => [t[0] - 1, t[1] - 2]);
-    const se = hexagon.map(t => [t[0] + 1, t[1] - 1]);
-
-    const e = hexagon.map(t => [t[0] + 6, t[1]]);
-
-    return [s, sw, nw, n, ne, se, e];
-  }
-
-  function mix(array) {
-    return _.reduce(
-      _.drop(array, 1),
-      (acc, current) => {
-        acc.push(_.last(acc), _.head(current), ...current);
-        return acc;
-      },
-      [..._.head(array)]
-    );
-  }
-
   /**
    * @param {WebGLRenderingContext} gl
    * @param {WebGLProgram} shaderProgram
    */
   function createVertices(gl, shaderProgram) {
-    const pointSize = gl.getAttribLocation(shaderProgram, "pointSize");
-    gl.vertexAttrib1f(pointSize, 10.0);
-
     const buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    const a = [1, 0];
-    const b = [1, 1];
-    const c = [0, 1];
-    const d = [-1, 0];
-    const e = [-1, -1];
-    const f = [0, -1];
-    const hexagon = [a, b, f, b, e, c, c, d, e];
     gl.bufferData(
       gl.ARRAY_BUFFER,
       new Float32Array(
-        [].concat(
-          ...mix([hexagon, ...neighbors(hexagon)])
-        ) /*[].concat(...hexagon, ...neighbors(hexagon))*/
+        [].concat(...[[0, 0], [-1, -1], [-1, 1], [1, 1], [1, -1], [-1, -1]])
       ),
       gl.STATIC_DRAW
     );
@@ -99,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     const coords = gl.getAttribLocation(shaderProgram, "coords");
     gl.vertexAttribPointer(coords, 2, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(coords);
-    //gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
     const windowSize = gl.getUniformLocation(shaderProgram, "windowSize");
     gl.uniform2f(windowSize, gl.canvas.width, gl.canvas.height);
@@ -110,16 +73,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
    * @param {WebGLProgram} shaderProgram
    */
   function updateData(gl, shaderProgram, timestamp) {
-    const periode = 5000;
+    const periode = 10000;
     const progress = (timestamp % periode) / periode;
-    const angle = gl.getAttribLocation(shaderProgram, "angle");
-    gl.vertexAttrib1f(angle, progress);
-
-    const angle2 = gl.getUniformLocation(shaderProgram, "angle2");
-    gl.uniform1f(angle2, progress);
+    const angle = gl.getUniformLocation(shaderProgram, "angle");
+    gl.uniform1f(angle, progress);
 
     const color = gl.getUniformLocation(shaderProgram, "color");
-    gl.uniform4f(color, 0 * progress, 1.0, 1.0, 1.0);
+    gl.uniform4f(color, progress, 1.0, 1.0, 1.0);
   }
 
   /**
@@ -130,11 +90,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     return timestamp => {
       //gl.clear(gl.COLOR_BUFFER_BIT);
       updateData(glCtx, shaderProgram, timestamp);
-      gl.drawArrays(
-        gl.TRIANGLE_STRIP,
-        0,
-        9 * 8 + (8 - 1) * 2 /*9 * 7*/ /*6 * 3 * 7*/
-      );
+      gl.drawArrays(gl.TRIANGLE_FAN, 0, 6);
       return true;
     };
   }
@@ -152,6 +108,4 @@ document.addEventListener("DOMContentLoaded", function(event) {
     const start = performance.now();
     while (f((await requestAnimationFrame()) - start));
   }
-})();
-
 });
