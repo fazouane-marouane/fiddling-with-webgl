@@ -4,6 +4,7 @@ precision mediump float;
 
 uniform float angle;
 uniform vec4 color;
+uniform vec2 mouse;
 uniform vec2 windowSize;
 
 
