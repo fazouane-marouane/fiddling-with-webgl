@@ -1,8 +1,8 @@
 #game-container {
   position: relative;
   border: 1px solid red;
-  height: 360px;
-  width: 640px;
+  height: 620px;
+  width: 1102px;
   box-sizing: content-box;
 }
 #game-container canvas {
