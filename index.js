@@ -23,6 +23,10 @@ window.addEventListener("DOMContentLoaded", async function() {
   document.addEventListener("mousemove", evt => {
     pos = getMousePos(canvas, evt);
   });
+  document.addEventListener("touchmove", evt => {
+    pos = getMousePos(canvas, evt);
+  });
+
 
   /**
    * @param {WebGLRenderingContext} gl
