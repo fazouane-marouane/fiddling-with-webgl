@@ -1,4 +1,3 @@
-#version 300 es
 #define PI 3.1415926538
 
 attribute vec2 coords;
