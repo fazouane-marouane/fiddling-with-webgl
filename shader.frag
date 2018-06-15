@@ -13,17 +13,17 @@ mat2 mInv = mat2(
   0.577, 1.154
 );
 
-vec4 CalcCameraSpacePosition()
+vec4 CalcCameraSpacePosition(vec4 p)
 {
     vec4 ndcPos;
     float min_ws = min(windowSize.x, windowSize.y);
     float max_ws = max(windowSize.x, windowSize.y);
-    ndcPos.xy = ((gl_FragCoord.xy / max_ws) * 2.0) - 1.0;
-    ndcPos.z = (2.0 * gl_FragCoord.z - gl_DepthRange.near - gl_DepthRange.far) /
+    ndcPos.xy = ((p.xy / max_ws) * 2.0) - 1.0;
+    ndcPos.z = (2.0 * p.z - gl_DepthRange.near - gl_DepthRange.far) /
         (gl_DepthRange.far - gl_DepthRange.near);
     ndcPos.w = 1.0;
  
-    vec4 clipPos = ndcPos / gl_FragCoord.w;
+    vec4 clipPos = ndcPos / p.w;
     return clipPos + vec4(0.0, 1.0 - min_ws/max_ws, 0.0, 0.0);
 }
 
