@@ -11,6 +11,28 @@ window.addEventListener("DOMContentLoaded", async function() {
     canvas.getContext("webgl") ||
     canvas.getContext("experimental-webgl"));
 
+  function getMousePos(canvas, evt) {
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: evt.clientX - rect.left,
+      y: glCtx.canvas.height - 1 - (evt.clientY - rect.top)
+    };
+  }
+
+  let pos = { x: 0, y: 0 };
+  document.addEventListener("mousemove", evt => {
+    pos = getMousePos(canvas, evt);
+  });
+
+  /**
+   * @param {WebGLRenderingContext} gl
+   */
+  function init(gl) {
+    console.log("gl", gl);
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    gl.clearColor(1, 0.5, 0, 0.5);
+  }
+
   /**
    * @param {WebGLRenderingContext} gl
    */
@@ -77,6 +99,9 @@ window.addEventListener("DOMContentLoaded", async function() {
     const progress = (timestamp % periode) / periode;
     const angle = gl.getUniformLocation(shaderProgram, "angle");
     gl.uniform1f(angle, progress);
+
+    const mouse = gl.getUniformLocation(shaderProgram, "mouse");
+    gl.uniform2f(mouse, pos.x, pos.y);
 
     const color = gl.getUniformLocation(shaderProgram, "color");
     gl.uniform4f(color, progress, 1.0, 1.0, 1.0);
