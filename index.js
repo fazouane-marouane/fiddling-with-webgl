@@ -24,7 +24,7 @@ window.addEventListener("DOMContentLoaded", async function() {
     pos = getMousePos(canvas, evt);
   });
   document.addEventListener("touchmove", evt => {
-    pos = getMousePos(canvas, evt);
+    pos = getMousePos(canvas, evt.targetTouches.item(0));
   });
 
 
