@@ -40,14 +40,18 @@ vec2 updateCenter(vec2 c, vec2 acc, vec2 p) {
   return acc;
 }
 
-void main() {
+vec2 getPosition(vec4 p) {
   float radianAngle = -2.0 * PI * angle;
   mat2 rotation = mat2(
     cos(radianAngle), sin(radianAngle),
     -sin(radianAngle), cos(radianAngle)
   );
-  vec2 clipPos = CalcCameraSpacePosition().xy;
+  vec2 clipPos = CalcCameraSpacePosition(p).xy;
   vec2 position = 10.0 * mInv * rotation * clipPos;
+  return position;
+}
+
+vec2 getCenter(vec2 position) {
   vec2 c1 = floor(position);
   vec2 c2 = ceil(position);
   vec2 c3 = vec2(c1.x, c2.y);
@@ -59,6 +63,13 @@ void main() {
             position),
         position),
     position);
+  return center;
+}
+
+void main() {
+  vec2 position = getPosition(gl_FragCoord);
+  vec2 center = getCenter(position);
+  vec2 mouseCenter = getCenter(getPosition(vec4(mouse, 0.0, 1.0)));
   vec2 pos = position - center;
   float cc = fract(angle);
   float d = 2.0 * (cc <= 0.5 ? cc: 1.0-cc);
@@ -70,9 +81,13 @@ void main() {
        abs(pos.x-pos.y) <= 1.0 - 2.0*delta) {
       gl_FragColor = hsv2rgb(color);//vec4(0.0, 0.0, 0.0, 1.0);
     } else {
-      float c = fract(angle);
-      c = 2.0 * (c <= 0.5 ? c: 1.0 - c);
-      gl_FragColor = vec4(c, c, c, 1.0);//vec4((1.0+ cos(center.x))/2.0, (1.0+ sin(center.y))/2.0, (1.0-cos(center.y)*sin(center.x))/2.0, 1.0);
+      if (mouseCenter.x == center.x && mouseCenter.y == center.y) {
+        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+      } else {
+        float c = fract(angle);
+        c = 2.0 * (c <= 0.5 ? c: 1.0 - c);
+        gl_FragColor = vec4(c, c, c, 1.0);//vec4((1.0+ cos(center.x))/2.0, (1.0+ sin(center.y))/2.0, (1.0-cos(center.y)*sin(center.x))/2.0, 1.0);
+      }
     }
   } else {
     gl_FragColor = hsv2rgb(color);
