@@ -6,8 +6,8 @@ window.addEventListener("DOMContentLoaded", async function() {
     "game-view"
   ));
   const glCtx =
-    /** @type {WebGLRenderingContext} */ (canvas.getContext("webgl2") ||
-    canvas.getContext("experimental-webgl2") ||
+    /** @type {WebGLRenderingContext} */ (/*canvas.getContext("webgl2") ||
+    canvas.getContext("experimental-webgl2") ||*/
     canvas.getContext("webgl") ||
     canvas.getContext("experimental-webgl"));
 
