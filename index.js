@@ -5,11 +5,15 @@ window.addEventListener("DOMContentLoaded", async function() {
   const canvas = /** @type {HTMLCanvasElement} */ (document.getElementById(
     "game-view"
   ));
+  const glOptions = {
+    failIfMajorPerformanceCaveat: false,
+    preserveDrawingBuffer: true,
+  };
   const glCtx =
-    /** @type {WebGLRenderingContext} */ (/*canvas.getContext("webgl2") ||
-    canvas.getContext("experimental-webgl2") ||*/
-    canvas.getContext("webgl") ||
-    canvas.getContext("experimental-webgl"));
+    /** @type {WebGLRenderingContext} */ (/*canvas.getContext("webgl2", glOptions) ||
+    canvas.getContext("experimental-webgl2", glOptions) ||*/
+    canvas.getContext("webgl", glOptions) ||
+    canvas.getContext("experimental-webgl", glOptions));
 
   function getMousePos(canvas, evt) {
     const rect = canvas.getBoundingClientRect();
