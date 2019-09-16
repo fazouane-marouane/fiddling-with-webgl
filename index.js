@@ -10,8 +10,8 @@ window.addEventListener("DOMContentLoaded", async function() {
     preserveDrawingBuffer: true,
   };
   const glCtx =
-    /** @type {WebGLRenderingContext} */ (/*canvas.getContext("webgl2", glOptions) ||
-    canvas.getContext("experimental-webgl2", glOptions) ||*/
+    /** @type {WebGLRenderingContext} */ (canvas.getContext("webgl2", glOptions) ||
+    canvas.getContext("experimental-webgl2", glOptions) ||
     canvas.getContext("webgl", glOptions) ||
     canvas.getContext("experimental-webgl", glOptions));
 
