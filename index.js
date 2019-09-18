@@ -1,3 +1,11 @@
+window.isPdfReadyState = false;
+window.isPdfReady = () => window.isPdfReadyState;
+
+setTimeout(() => {
+  window.isPdfReadyState = true;
+  console.log(">>> pdf ready to be rendered");
+}, 5000);
+
 // @ts-check
 window.addEventListener("DOMContentLoaded", async function() {
   "use strict";
