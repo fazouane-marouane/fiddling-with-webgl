@@ -4,6 +4,10 @@ window.isPdfReady = () => window.isPdfReadyState;
 setTimeout(() => {
   window.isPdfReadyState = true;
   console.log(">>> pdf ready to be rendered");
+  if (location.search) {
+    // freeze
+    window.requestAnimationFrame = () => {};
+  }
 }, 5000);
 
 // @ts-check
