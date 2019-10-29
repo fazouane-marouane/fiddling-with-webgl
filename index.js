@@ -6,7 +6,7 @@ setTimeout(() => {
   console.log(">>> pdf ready to be rendered");
   if (location.search) {
     // freeze
-    window.requestAnimationFrame = (_, reject) => reject();
+    window.requestAnimationFrame = () => {};
   }
 }, 5000);
 
