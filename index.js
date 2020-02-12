@@ -12,7 +12,7 @@ setTimeout(() => {
   }
   if (location.search.indexOf('clean') > -1) {
       const canvas = document.getElementById("game-view");
-      canvas.parent.removeChild(canvas);
+      canvas.parentElement.removeChild(canvas);
   }
 }, 5000);
 
