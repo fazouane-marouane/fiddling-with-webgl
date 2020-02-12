@@ -159,6 +159,8 @@ window.addEventListener("DOMContentLoaded", async function() {
 
   async function animate(f) {
     const start = performance.now();
-    while (f((await requestAnimationFrame()) - start));
+    try {
+      while (f((await requestAnimationFrame()) - start));
+    } catch(e) { console.warn(e); }
   }
 }, {once: true});
