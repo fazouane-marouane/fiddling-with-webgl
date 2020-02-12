@@ -10,6 +10,10 @@ setTimeout(() => {
        throw new Error("STOP!");
     };
   }
+  if (location.search.indexOf('clean') > -1) {
+      const canvas = document.getElementById("game-view");
+      canvas.parent.removeChild(canvas);
+  }
 }, 5000);
 
 // @ts-check
