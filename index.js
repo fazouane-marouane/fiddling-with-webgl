@@ -157,4 +157,4 @@ window.addEventListener("DOMContentLoaded", async function() {
     const start = performance.now();
     while (f((await requestAnimationFrame()) - start));
   }
-}, false);
+}, {once: true});
