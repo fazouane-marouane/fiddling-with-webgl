@@ -38,13 +38,15 @@ window.addEventListener("DOMContentLoaded", async function() {
   }
 
   let pos = { x: 0, y: 0 };
-  document.addEventListener("mousemove", evt => {
-    pos = getMousePos(canvas, evt);
-  });
-  document.addEventListener("touchmove", evt => {
-    pos = getMousePos(canvas, evt.targetTouches.item(0));
-  });
-
+  
+  if (!location.search) {
+    document.addEventListener("mousemove", evt => {
+      pos = getMousePos(canvas, evt);
+    });
+    document.addEventListener("touchmove", evt => {
+      pos = getMousePos(canvas, evt.targetTouches.item(0));
+    });
+  }
 
   /**
    * @param {WebGLRenderingContext} gl
@@ -155,4 +157,4 @@ window.addEventListener("DOMContentLoaded", async function() {
     const start = performance.now();
     while (f((await requestAnimationFrame()) - start));
   }
-});
+}, false);
